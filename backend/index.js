@@ -9,7 +9,7 @@ app.use(express.json());
 
 app.get('/', (request, response) => {
   console.log('Request received');
-  return response.status(234).send('Hello, World!');
+  return response.status(200).send('Hello, World!');
 });
 
 app.post('/books', async (request, response) => {
@@ -25,6 +25,19 @@ app.post('/books', async (request, response) => {
   }catch(error){
     console.error('Error occurred:', error);
     return response.status(500).send('Internal Server Error');
+  }
+})
+
+app.get('/books', async (request, response) => {
+  try {
+    const books = await Book.find();
+    return response.status(200).json({
+      count: books.length,
+      data: books,
+    });
+  } catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message});
   }
 })
 
